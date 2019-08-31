@@ -18,7 +18,7 @@ import {
 
 class SignupForm extends Component {
   render() {
-    const { errors, touched, handleChange } = this.props;
+    const { errors, touched, handleChange, isSubmitting } = this.props;
     return (
       <Grid container justify='center' alignContent='center'>
         <Grid item xs={6} md={4}>
@@ -104,7 +104,13 @@ class SignupForm extends Component {
               />
 
               <FormControl fullWidth margin='normal'>
-                <Fab variant='extended' color='primary' type='submit'>
+                <Fab
+                  variant='extended'
+                  color='primary'
+                  type='submit'
+                  onClick={this.props.handleSubmit}
+                  disabled={isSubmitting}
+                >
                   Sign up
                 </Fab>
               </FormControl>
@@ -137,6 +143,17 @@ const FormikForm = withFormik({
       .required('Password is required')
       .min(8, 'Password must have min 8 characters'),
   }),
+  handleSubmit(values, { resetForm, setErrors, setSubmitting }) {
+    // Handle submit form
+    setTimeout(() => {
+      if (values.email === 'vtthanh99@gmail.com') {
+        setErrors({ email: 'Email already taken' }); // Set error bag
+      } else {
+        resetForm(); // Clear form data
+      }
+      setSubmitting(false); // Set isSubmitting to false
+    }, 1000);
+  },
 })(SignupForm);
 
 export default FormikForm;
